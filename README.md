@@ -20,3 +20,4 @@ možná vylepšení:
 - Nastavitelnost "resetování/neresetování" agregovaných počtu kusů po vypsání do konzole / poslání někam dál.
 - Dal by se nastavit Rate Limiting pro omezení maximálního využití API.
 - API metoda pro POST /api/Orders by mohla být jako async. Momentálně to ale nemá smysl, když se využívá in memmory úložiště v podobě Dictionary. Smysl by to mohlo mít v případě volání nějakého jiného API, nebo ukládání třeba do MSSQL DB.
+- Dal by se přidat globální exception middleware pro logování výjimek, co vzniknou během volání API metody.
