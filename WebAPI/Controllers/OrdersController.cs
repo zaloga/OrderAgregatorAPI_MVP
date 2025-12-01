@@ -37,9 +37,13 @@ public class OrdersController : ControllerBase
         // Basic request validation
         if (orders is null || orders.Count == 0)
         {
+            string error = "Request body must contain at least one order item.";
+
+            _logger.LogWarning(error);
+
             return BadRequest(new
             {
-                Error = "Request body must contain at least one order item."
+                Error = error
             });
         }
 
@@ -50,9 +54,13 @@ public class OrdersController : ControllerBase
 
         if (validOrders.Count == 0)
         {
+            string error = "All order items have invalid productId or quantity.";
+
+            _logger.LogWarning(error);
+
             return BadRequest(new
             {
-                Error = "All order items have invalid productId or quantity."
+                Error = error
             });
         }
 

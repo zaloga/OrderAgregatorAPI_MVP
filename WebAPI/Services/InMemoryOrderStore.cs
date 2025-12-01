@@ -39,6 +39,12 @@ public sealed class InMemoryOrderStore : IOrderStore
                 }
                 else
                 {
+                    // overflow check
+                    if (current > int.MaxValue - order.Quantity)
+                    {
+                        throw new OverflowException($"Quantity overflow for product {order.ProductId}. Previous total quantity was {current} and new increment was {order.Quantity}.");
+                    }
+
                     _totals[order.ProductId] = current + order.Quantity;
                 }
             }
