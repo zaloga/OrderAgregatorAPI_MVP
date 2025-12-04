@@ -16,9 +16,19 @@ public sealed class OrderFlushBackgroundService(
     private readonly IOrderStore _orderStore = orderStore;
     private readonly int _flushIntervalSeconds = configuration.GetValue<int>(
             "AggregatorFlushConfiguration:FlushIntervalSeconds");
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        if (_flushIntervalSeconds <= 0)
+        {
+            throw new InvalidOperationException(
+                $"FlushIntervalSeconds must be > 0. Current value: {_flushIntervalSeconds}.");
+        }
+
         _logger.LogInformation("Order flush background service starting with interval {Interval} seconds.", _flushIntervalSeconds);
 
         // Simple timer loop: delay -> flush -> repeat
@@ -43,11 +53,15 @@ public sealed class OrderFlushBackgroundService(
                     .Select(kvp => new AggregatedOrderItemDto(kvp.Key, kvp.Value))
                     .ToList();
 
-                string jsonOutput = JsonSerializer.Serialize(aggregatedOrderItems);
+                string jsonOutput = JsonSerializer.Serialize(aggregatedOrderItems, JsonOptions);
 
                 _logger.LogInformation("Flushing {Count} aggregated order items to internal system.", aggregatedOrderItems.Count);
 
                 Console.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Aggregated orders: {jsonOutput}");
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogWarning("Order flush background was stopped by cancellation token.");
             }
             catch (Exception ex)
             {
