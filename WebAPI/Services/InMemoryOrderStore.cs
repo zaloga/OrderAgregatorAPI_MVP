@@ -12,9 +12,7 @@ public sealed class InMemoryOrderStore : IOrderStore
     private readonly object _lock = new();
 
 
-    /// <summary>
-    /// Adds order items (its counts) into in-memmory collection (Dictionary) keyed by ProductId.
-    /// </summary>
+    /// <inheritdoc />
     public void AddOrders(IEnumerable<OrderItemRequest> orders)
     {
         if (orders is null)
@@ -52,9 +50,7 @@ public sealed class InMemoryOrderStore : IOrderStore
     }
 
 
-    /// <summary>
-    /// Gets agregated order items (total counts).
-    /// </summary>
+    /// <inheritdoc />
     public Dictionary<int, int> GetAgregatedOrdersAndClear()
     {
         Dictionary<int, int> snapshot;
