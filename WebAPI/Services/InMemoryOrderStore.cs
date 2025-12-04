@@ -20,7 +20,7 @@ public sealed class InMemoryOrderStore : IOrderStore
             throw new ArgumentNullException(nameof(orders));
         }
 
-        // Lock to guarantee that snapshot (GetAgregatedOrdersAndClear) sees a consistent state and that no orders are "lost" between snapshot and Clear().
+        // Lock to guarantee that snapshot (GetAggregatedOrdersAndClear) sees a consistent state and that no orders are "lost" between snapshot and Clear().
         lock (_lock)
         {
             foreach (OrderItemRequest order in orders)
@@ -51,7 +51,7 @@ public sealed class InMemoryOrderStore : IOrderStore
 
 
     /// <inheritdoc />
-    public Dictionary<int, int> GetAgregatedOrdersAndClear()
+    public Dictionary<int, int> GetAggregatedOrdersAndClear()
     {
         Dictionary<int, int> snapshot;
 

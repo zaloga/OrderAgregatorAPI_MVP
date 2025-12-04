@@ -11,7 +11,7 @@ public interface IOrderStore
     void AddOrders(IEnumerable<OrderItemRequest> orders);
 
     /// <summary>
-    /// Gets agregated order items (total counts).
+    /// Gets aggregated order items (total counts).
     /// </summary>
-    Dictionary<int, int> GetAgregatedOrdersAndClear();
+    Dictionary<int, int> GetAggregatedOrdersAndClear();
 }

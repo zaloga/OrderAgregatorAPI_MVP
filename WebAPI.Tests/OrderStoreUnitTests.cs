@@ -22,8 +22,8 @@ public class OrderStoreUnitTests
         });
 
         // Act
-        Dictionary<int, int> firstStoreSnapshot = orderStore.GetAgregatedOrdersAndClear();
-        Dictionary<int, int> secondStoreSnapshot = orderStore.GetAgregatedOrdersAndClear();
+        Dictionary<int, int> firstStoreSnapshot = orderStore.GetAggregatedOrdersAndClear();
+        Dictionary<int, int> secondStoreSnapshot = orderStore.GetAggregatedOrdersAndClear();
 
         // Assert
         Assert.Equal(2, firstStoreSnapshot.Count); // expects 2 different products in first order store snapshot
@@ -55,7 +55,7 @@ public class OrderStoreUnitTests
         {
             orderStore.AddOrders(ordersCollection); 
         }
-        Dictionary<int, int> storeSnapshot = orderStore.GetAgregatedOrdersAndClear();
+        Dictionary<int, int> storeSnapshot = orderStore.GetAggregatedOrdersAndClear();
 
         // Assert
         Assert.Equal(4, storeSnapshot.Count); //expects 4 different products in first order store snapshot

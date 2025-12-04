@@ -31,7 +31,7 @@ public sealed class OrderFlushBackgroundService(
                 await Task.Delay(interval, stoppingToken);
 
                 // get current state (snapshot) and clear all
-                Dictionary<int, int> storeSnapshot = _orderStore.GetAgregatedOrdersAndClear();
+                Dictionary<int, int> storeSnapshot = _orderStore.GetAggregatedOrdersAndClear();
                 if (storeSnapshot.Count == 0)
                 {
                     // Nothing to send this time – skip
