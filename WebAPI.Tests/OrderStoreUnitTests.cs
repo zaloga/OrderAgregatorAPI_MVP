@@ -59,9 +59,9 @@ public class OrderStoreUnitTests
 
         // Assert
         Assert.Equal(4, storeSnapshot.Count); //expects 4 different products in first order store snapshot
-        Assert.Equal(110000, storeSnapshot[123456]); // expects 40 pieces of product 123456
-        Assert.Equal(220000, storeSnapshot[234567]); // expects 40 pieces of product 234567
-        Assert.Equal(330000, storeSnapshot[345678]); // expects 40 pieces of product 345678
-        Assert.Equal(440000, storeSnapshot[456789]); // expects 40 pieces of product 456789
+        Assert.Equal(110000, storeSnapshot[123456]); // expects 110000 pieces of product 123456
+        Assert.Equal(220000, storeSnapshot[234567]); // expects 220000 pieces of product 234567
+        Assert.Equal(330000, storeSnapshot[345678]); // expects 330000 pieces of product 345678
+        Assert.Equal(440000, storeSnapshot[456789]); // expects 440000 pieces of product 456789
     }
 }

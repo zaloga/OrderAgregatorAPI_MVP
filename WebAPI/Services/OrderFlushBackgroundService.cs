@@ -38,13 +38,14 @@ public sealed class OrderFlushBackgroundService(
                     continue;
                 }
 
-                // Convert the dictionary to DTOs collection to improve readability of the output
-                IEnumerable<AggregatedOrderItemDto> aggregatedOrderItems = storeSnapshot
-                    .Select(kvp => new AggregatedOrderItemDto(kvp.Key, kvp.Value));
+                // Convert the dictionary to DTOs to improve readability of the output
+                List<AggregatedOrderItemDto> aggregatedOrderItems = storeSnapshot
+                    .Select(kvp => new AggregatedOrderItemDto(kvp.Key, kvp.Value))
+                    .ToList();
 
                 string jsonOutput = JsonSerializer.Serialize(aggregatedOrderItems);
 
-                _logger.LogInformation("Flushing {Count} aggregated order items to internal system.", aggregatedOrderItems.Count());
+                _logger.LogInformation("Flushing {Count} aggregated order items to internal system.", aggregatedOrderItems.Count);
 
                 Console.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Aggregated orders: {jsonOutput}");
             }
