@@ -14,62 +14,31 @@ public class OrdersController : ControllerBase
     private readonly ILogger<OrdersController> _logger;
     private readonly IOrderStore _orderStore;
 
-
     public OrdersController(ILogger<OrdersController> logger, IOrderStore orderStore)
     {
         _logger = logger;
         _orderStore = orderStore;
     }
 
-
     /// <summary>
-    /// Accepts one or more order items and stores them for aggregation.
+    /// Accepts one or more valid order items and stores them for aggregation.
     /// Aggregated data are periodically flushed to internal system / console.
     /// </summary>
-    /// <param name="orders">Array of incoming order items.</param>
+    /// <param name="request">Batch of incoming order items.</param>
     /// <returns>202 Accepted on success, 400 on validation error.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Post(
-        [FromBody] List<OrderItemRequest> orders)
+    public IActionResult Post([FromBody] OrdersRequest request)
     {
-        // Basic request validation
-        if (orders is null || orders.Count == 0)
-        {
-            string error = "Request body must contain at least one order item.";
 
-            _logger.LogWarning(error);
-
-            return BadRequest(new
-            {
-                Error = error
-            });
-        }
-
-        // Filter out invalid items
-        var validOrders = orders
-            .Where(o => o.ProductId > 0 && o.Quantity > 0)
-            .ToList();
-
-        if (validOrders.Count == 0)
-        {
-            string error = "All order items have invalid productId or quantity.";
-
-            _logger.LogWarning(error);
-
-            return BadRequest(new
-            {
-                Error = error
-            });
-        }
+        var orders = request.Orders;
 
         _logger.LogInformation(
-            "Received {Count} order items and from that {ValidCount} valid order items.",
-            orders.Count,
-            validOrders.Count);
+            "Received {Count} valid order items.",
+            orders.Count);
 
-        _orderStore.AddOrders(validOrders);
+        _orderStore.AddOrders(orders);
 
         // 202 Accepted on success
         return Accepted();
