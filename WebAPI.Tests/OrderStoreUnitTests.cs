@@ -10,16 +10,24 @@ public class OrderStoreUnitTests
     {
         // Arrange
         var orderStore = new InMemoryOrderStore();
-        orderStore.AddOrders(new[]
-        {
-            new OrderItemRequest(123456, 10),
-            new OrderItemRequest(456789, 20)
-        });
-        orderStore.AddOrders(new[]
-        {
-            new OrderItemRequest(123456, 30),
-            new OrderItemRequest(456789, 40)
-        });
+        orderStore.AddOrders(
+            new OrdersRequest(
+                new List<OrderItemRequest>
+                {
+                    new OrderItemRequest(123456, 10),
+                    new OrderItemRequest(456789, 20)
+                }
+            )
+        );
+        orderStore.AddOrders(
+            new OrdersRequest(
+                new List<OrderItemRequest>
+                {
+                    new OrderItemRequest(123456, 30),
+                    new OrderItemRequest(456789, 40)
+                }
+            )
+        );
 
         // Act
         Dictionary<int, int> firstStoreSnapshot = orderStore.GetAggregatedOrdersAndClear();
@@ -53,7 +61,7 @@ public class OrderStoreUnitTests
         // Act
         for (int i = 0; i < 100; i++) // 100x add the prepared orders collection into order store
         {
-            orderStore.AddOrders(ordersCollection); 
+            orderStore.AddOrders(new OrdersRequest(ordersCollection));
         }
         Dictionary<int, int> storeSnapshot = orderStore.GetAggregatedOrdersAndClear();
 

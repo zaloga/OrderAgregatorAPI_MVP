@@ -24,21 +24,18 @@ public class OrdersController : ControllerBase
     /// Accepts one or more valid order items and stores them for aggregation.
     /// Aggregated data are periodically flushed to internal system / console.
     /// </summary>
-    /// <param name="request">Batch of incoming order items.</param>
+    /// <param name="ordersRequest">Batch of incoming order items.</param>
     /// <returns>202 Accepted on success, 400 on validation error.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Post([FromBody] OrdersRequest request)
+    public IActionResult Post([FromBody] OrdersRequest ordersRequest)
     {
-
-        var orders = request.Orders;
-
         _logger.LogInformation(
             "Received {Count} valid order items.",
-            orders.Count);
+            ordersRequest.OrderItems.Count);
 
-        _orderStore.AddOrders(orders);
+        _orderStore.AddOrders(ordersRequest);
 
         // 202 Accepted on success
         return Accepted();

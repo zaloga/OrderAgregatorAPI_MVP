@@ -1,4 +1,5 @@
-﻿using WebAPI.Requests;
+﻿using System.ComponentModel.DataAnnotations;
+using WebAPI.Requests;
 
 namespace WebAPI.Services;
 
@@ -13,24 +14,17 @@ public sealed class InMemoryOrderStore : IOrderStore
 
 
     /// <inheritdoc />
-    public void AddOrders(IEnumerable<OrderItemRequest> orders)
+    public void AddOrders(OrdersRequest ordersRequest)
     {
-        if (orders is null)
-        {
-            throw new ArgumentNullException(nameof(orders));
-        }
+        // basic validations
+        ArgumentNullException.ThrowIfNull(ordersRequest);
+        ValidateOrdersRequest(ordersRequest);
 
         // Lock to guarantee that snapshot (GetAggregatedOrdersAndClear) sees a consistent state and that no orders are "lost" between snapshot and Clear().
         lock (_lock)
         {
-            foreach (OrderItemRequest order in orders)
+            foreach (OrderItemRequest order in ordersRequest.OrderItems)
             {
-                if (order.ProductId < 0)
-                {
-                    // skip invalid product IDs.
-                    continue;
-                }
-
                 if (!_totals.TryGetValue(order.ProductId, out int current))
                 {
                     _totals[order.ProductId] = order.Quantity;
@@ -60,10 +54,29 @@ public sealed class InMemoryOrderStore : IOrderStore
             // Copy current totals into a separate dictionary
             snapshot = new Dictionary<int, int>(_totals);
 
-            // Clear internal state so that new batch can be accumulated
+            // Clear internal state so that a new batch can be accumulated
             _totals.Clear();
         }
 
         return snapshot;
+    }
+
+
+    /// <summary>
+    /// Model validation based on attributes on OrdersRequest and OrderItemRequest
+    /// </summary>
+    /// <param name="ordersRequest">Orders Request - wrapper of Order Item Requests</param>
+    private static void ValidateOrdersRequest(OrdersRequest ordersRequest)
+    {
+        // Validate the OrdersRequest
+        var ctxOrders = new ValidationContext(ordersRequest);
+        Validator.ValidateObject(ordersRequest, ctxOrders, validateAllProperties: true);
+
+        // Validate each OrderItemRequest
+        foreach (OrderItemRequest orderItem in ordersRequest.OrderItems)
+        {
+            var ctxOrderItems = new ValidationContext(orderItem);
+            Validator.ValidateObject(orderItem, ctxOrderItems, validateAllProperties: true);
+        }
     }
 }
