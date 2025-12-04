@@ -11,22 +11,24 @@ public class OrderStoreUnitTests
         // Arrange
         var orderStore = new InMemoryOrderStore();
         orderStore.AddOrders(
-            new OrdersRequest(
-                new List<OrderItemRequest>
+            new OrdersRequest()
+            {
+                OrderItems = new List<OrderItemRequest>
                 {
-                    new OrderItemRequest(123456, 10),
-                    new OrderItemRequest(456789, 20)
+                    new OrderItemRequest { ProductId = 123456, Quantity = 10 },
+                    new OrderItemRequest { ProductId = 456789, Quantity = 20 }
                 }
-            )
+            }
         );
         orderStore.AddOrders(
-            new OrdersRequest(
-                new List<OrderItemRequest>
+            new OrdersRequest()
+            {
+                OrderItems = new List<OrderItemRequest>
                 {
-                    new OrderItemRequest(123456, 30),
-                    new OrderItemRequest(456789, 40)
+                    new OrderItemRequest { ProductId = 123456, Quantity = 30 },
+                    new OrderItemRequest { ProductId = 456789, Quantity = 40 }
                 }
-            )
+            }
         );
 
         // Act
@@ -51,17 +53,17 @@ public class OrderStoreUnitTests
         {
             ordersCollection.AddRange(new[]
             {
-                new OrderItemRequest(123456, 11),
-                new OrderItemRequest(234567, 22),
-                new OrderItemRequest(345678, 33),
-                new OrderItemRequest(456789, 44)
+                new OrderItemRequest { ProductId = 123456, Quantity = 11 },
+                new OrderItemRequest { ProductId = 234567, Quantity = 22 },
+                new OrderItemRequest { ProductId = 345678, Quantity = 33 },
+                new OrderItemRequest { ProductId = 456789, Quantity = 44 }
             });
         }
 
         // Act
         for (int i = 0; i < 100; i++) // 100x add the prepared orders collection into order store
         {
-            orderStore.AddOrders(new OrdersRequest(ordersCollection));
+            orderStore.AddOrders(new OrdersRequest() { OrderItems = ordersCollection });
         }
         Dictionary<int, int> storeSnapshot = orderStore.GetAggregatedOrdersAndClear();
 
