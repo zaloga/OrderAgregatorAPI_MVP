@@ -36,13 +36,12 @@ V rámci "ukázkového zadání" a "ukázkové implementace" si ale myslím, že
 
 
 ## Realizovaná vylepšení:
-- productId jako int - pokud to je vždy int-ové číslo, tak je lepší to držet jako int už z důvodu optimalizace a konzistence dat. V mém řešení jsem vyšel z předpokladu, že to bude int. Když tak můžu upravit na cokoliv jiného, pokud o to bude zájem a commitnout do GITu.
+- productId jako int - pokud to je vždy int-ové číslo, tak je lepší to držet jako int už z důvodu optimalizace a konzistence dat. V mém řešení jsem vyšel z předpokladu, že to bude int. (Když tak můžu upravit na cokoliv jiného, pokud o to bude zájem a commitnout do GITu.)
 - Nastavitelnost četnosti posílání/vypisování agregovaných počtu kusů v appsettings.json (setting AggregatorFlushConfiguration.FlushIntervalSeconds)
-- Trochu logování.
 
 
 ## Možná další vylepšení:
-- Místo .net 8 je možné použít .net 9, kde jsou údajně performance a security vylepšení. Já jsem vyšel z předpokladu, že se používá LTS verze, což je .net 8. Přechod na .net 9 by byl ale měl být celkem jednoduchý. Když tak mohu dodělat a commitnout do GITu, pokud o to bude zájem.
+- Místo .net 8 je možné použít .net 9, kde jsou performance a security vylepšení. Já jsem vyšel z předpokladu, že se používá LTS verze, což je aktuálně (Q4 2025) .net 8. Přechod na .net 9 by ale měl být celkem jednoduchý. (Když tak mohu dodělat a commitnout do GITu, pokud o to bude zájem.)
 - Mohla by se přidat nějaká podoba autentizace/autorizace.
 - Mohl by být někde uložen (v DB / appsettings.json / Azure Key Vault) seznam povolených IDček produktů a brát v úvahu pouze tyto povolené.
 - Pokud by ve vstupních datech bylo něco jako orderId nebo requestId, tak by se daly ignorovat nadbytečná duplicitní volání API.
