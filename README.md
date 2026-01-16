@@ -31,7 +31,7 @@ Navrhněte webovou službu, která:
 ## Pár slov k implemetaci:
 - Projekt jsem založil jako ASP.net Core WebAPI projekt se swaggerem (přes něj se API dobře zkouší).
 Měl jsem několik dotazů, které jsem poslal, ale stihl jsem naimplementovat "první verzi" před jejich odpovězením.
-Pokud to bude požadováno, tak případně mohu docomittnout úpravy podle odpovědí.
+Pokud to bude požadováno, tak případně mohu docommitnout úpravy podle odpovědí.
 V rámci "ukázkového zadání" a "ukázkové implementace" si ale myslím, že to nutné nebude.
 
 
