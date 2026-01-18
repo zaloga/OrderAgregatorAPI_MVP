@@ -1,7 +1,7 @@
 # OrderAgregatorAPI_MVP
-MVP agregátoru objednávek podle ukázkového zadání od firmy cbdata
+MVP agregátoru objednávek podle ukázkového zadáni.
 
-## Originální znění zadání:
+## Znění zadání:
 
 Navrhněte webovou službu, která:
 - Je napsaná v aktuální verzi .NET.
