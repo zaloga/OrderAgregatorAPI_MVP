@@ -34,7 +34,7 @@ Design a web service that:
 - Configurable frequency of sending/printing aggregated item counts in appsettings.json (setting AggregatorFlushConfiguration.FlushIntervalSeconds)
 
 ## Possible further improvements:
-- Instead of .net 8 it is possible to use .net 9, which includes performance and security improvements. I assumed an LTS version is used, which is currently (Q4 2025) .net 8. The upgrade to .net 9 should be quite straightforward.
+- Instead of .net 8 it is possible to use .net 9/10. I assumed an LTS version is used, which is currently .net 8 (the major part of the implementation was completed in Q4 2025). The upgrade to .net 9/10 should be quite straightforward.
 - Some form of authentication/authorization could be added.
 - A list of allowed product IDs could be stored somewhere (in DB / appsettings.json / Azure Key Vault) and only those allowed ones would be considered.
 - If the input data contained something like orderId or requestId, redundant duplicate API calls could be ignored.
@@ -42,3 +42,4 @@ Design a web service that:
 - Rate Limiting could be set up to limit maximum API usage.
 - Using FluentValidation instead of built-in model validation.
 - The API method for POST /api/Orders could be async. Right now it doesn’t make much sense because it uses in-memory storage (a Dictionary), which is very fast and doesn’t involve I/O. It would make sense if the method called another API or persisted data to an MSSQL database, where you might need to await I/O operations.
+- A ConcurrentDictionary could be used instead of a Dictionary and locks.
