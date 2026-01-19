@@ -1,50 +1,43 @@
 # OrderAgregatorAPI_MVP
-MVP agregátoru objednávek podle ukázkového zadáni.
+MVP of an order aggregator based on a sample assignment.
 
-## Znění zadání:
+## Assignment wording:
 
-Navrhněte webovou službu, která:
-- Je napsaná v aktuální verzi .NET.
-- Nabízí RESP API endpoint pro přijetí jedné nebo více objednávek ve formátu:
+Design a web service that:
+- Is written in the current version of .NET.
+- Offers a RESP API endpoint to accept one or more orders in the format:
   ```json
   [
     {
-      "productId": "456",
+      "productId": 456,
       "quantity": 5
     },
     {
-      "productId": "789",
+      "productId": 789,
       "quantity": 42
     }
   ]
-  ```
-- Objednávky se pro další zpracování agregují - sčítají se počty kusů dle Id produktu.
-- Agregované objednávky se ne častěji, než jednou za 20 vteřin, odešlou internímu systému - pro naše účely lze pouze naznačit a vypisovat JSON do konzole.
-- Služba by měla počítat s možností velkého množství malých objednávek (stovky za vteřinu) pro relativně limitovaný počet Id produktů (stovky celkem).
-- Způsob persistence dat by měl být rozšiřitelný a konfigurovatelný - pro naše účely bude stačit implementovat držení dat v paměti.
-- Kód by měl obsahovat (alespoň nějaké) testy.
-- Zkuste navrhnout další možná vylepšení a přímo je implementujte nebo jen naznačte / popište.
-- Mějte kód takový, jako si představuje v produkční aplikaci.
-- Kód odevzdejte nejlépe formou publikace na GitHub - možno i jako privátní repozitář.
+- Orders are aggregated for further processing - item counts are summed by product Id.
+- Aggregated orders are sent to an internal system no more often than once every 20 seconds - for our purposes it is sufficient to just indicate this and print JSON to the console.
+- The service should account for the possibility of a large number of small orders (hundreds per second) for a relatively limited number of product Ids (hundreds in total).
+- The data persistence approach should be extensible and configurable - for our purposes, implementing in-memory data storage will be sufficient.
+- The code should contain (at least some) tests.
+- Try to propose other possible improvements and either implement them directly or just outline / describe them.
+- Keep the code as you would imagine it in a production application.
+- Preferably submit the code by publishing it on GitHub.
 
+## A few words about the implementation:
+- I created the project as an ASP.net Core WebAPI project with Swagger, it makes the API easy to test.
 
-## Pár slov k implemetaci:
-- Projekt jsem založil jako ASP.net Core WebAPI projekt se swaggerem (přes něj se API dobře zkouší).
-Měl jsem několik dotazů, které jsem poslal, ale stihl jsem naimplementovat "první verzi" před jejich odpovězením.
-Pokud to bude požadováno, tak případně mohu docommitnout úpravy podle odpovědí.
-V rámci "ukázkového zadání" a "ukázkové implementace" si ale myslím, že to nutné nebude.
+## Implemented improvements:
+- Configurable frequency of sending/printing aggregated item counts in appsettings.json (setting AggregatorFlushConfiguration.FlushIntervalSeconds)
 
-
-## Realizovaná vylepšení:
-- productId jako int - pokud to je vždy int-ové číslo, tak je lepší to držet jako int už z důvodu optimalizace a konzistence dat. V mém řešení jsem vyšel z předpokladu, že to bude int. (Když tak můžu upravit na cokoliv jiného, pokud o to bude zájem a commitnout do GITu.)
-- Nastavitelnost četnosti posílání/vypisování agregovaných počtu kusů v appsettings.json (setting AggregatorFlushConfiguration.FlushIntervalSeconds)
-
-
-## Možná další vylepšení:
-- Místo .net 8 je možné použít .net 9, kde jsou performance a security vylepšení. Já jsem vyšel z předpokladu, že se používá LTS verze, což je aktuálně (Q4 2025) .net 8. Přechod na .net 9 by ale měl být celkem jednoduchý. (Když tak mohu dodělat a commitnout do GITu, pokud o to bude zájem.)
-- Mohla by se přidat nějaká podoba autentizace/autorizace.
-- Mohl by být někde uložen (v DB / appsettings.json / Azure Key Vault) seznam povolených IDček produktů a brát v úvahu pouze tyto povolené.
-- Pokud by ve vstupních datech bylo něco jako orderId nebo requestId, tak by se daly ignorovat nadbytečná duplicitní volání API.
-- Nastavitelnost "resetování/neresetování" agregovaných počtu kusů po vypsání do konzole / poslání někam dál.
-- Dal by se nastavit Rate Limiting pro omezení maximálního využití API.
-- API metoda pro POST /api/Orders by mohla být jako async. Momentálně to ale nemá smysl, když se využívá in memmory úložiště v podobě Dictionary. Smysl by to mohlo mít v případě volání nějakého jiného API, nebo ukládání třeba do MSSQL DB.
+## Possible further improvements:
+- Instead of .net 8 it is possible to use .net 9, which includes performance and security improvements. I assumed an LTS version is used, which is currently (Q4 2025) .net 8. The upgrade to .net 9 should be quite straightforward.
+- Some form of authentication/authorization could be added.
+- A list of allowed product IDs could be stored somewhere (in DB / appsettings.json / Azure Key Vault) and only those allowed ones would be considered.
+- If the input data contained something like orderId or requestId, redundant duplicate API calls could be ignored.
+- Configurability of "resetting/not resetting" aggregated item counts after printing to the console / sending further.
+- Rate Limiting could be set up to limit maximum API usage.
+- Using FluentValidation instead of built-in model validation.
+- The API method for POST /api/Orders could be async. Right now it doesn’t make much sense because it uses in-memory storage (a Dictionary), which is very fast and doesn’t involve I/O. It would make sense if the method called another API or persisted data to an MSSQL database, where you might need to await I/O operations.
