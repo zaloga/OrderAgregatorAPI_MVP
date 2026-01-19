@@ -28,6 +28,7 @@ Design a web service that:
 
 ## A few words about the implementation:
 - I created the project as an ASP.net Core WebAPI project with Swagger, it makes the API easy to test.
+- This implementation can be downloaded, built, run, and tested.
 
 ## Implemented improvements:
 - Configurable frequency of sending/printing aggregated item counts in appsettings.json (setting AggregatorFlushConfiguration.FlushIntervalSeconds)
